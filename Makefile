@@ -1,17 +1,17 @@
 CC = cc
 
-SRC = minishell.c
+SRC = minishell.c doc_2/bases.c
 
-NAME = minishell
+NAME = shell
 
-#FLAG = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -g3 -lreadline -lhistory
 
 OBJ     = $(SRC:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	@rm -f $(OBJ)

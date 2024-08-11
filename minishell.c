@@ -6,37 +6,11 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/11 17:20:01 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:38:22 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void    ft_putchar(char c, int fd)
-{
-    write(fd, &c, 1);
-}
-
-void  ft_putstr(char *str,int fd)
-{
-    int i = 0;
-
-    while (str[i] != '\0')
-    {
-        ft_putchar(str[i], fd);
-        i++;
-    }
-}
-int ft_strlen(char *str)
-{
-    int i =  0;
-
-    while (str[i] != '\0')
-    {
-        i++;
-    }
-    return i;
-}
+#include "headers/minishell.h"
 
 void    ignor_signals(mini_t *gene)
 {    
@@ -48,19 +22,52 @@ void    ignor_signals(mini_t *gene)
 void    initial(mini_t *gene)
 {
     gene->signalset = false;
-    
+    gene->prompt = NULL;
+}
+
+void exit_command(char *str)
+{
+    int i = 0;
+    char ext[] = "exit";
+
+    while (str[i] && ext[i] && str[i] == ext[i])
+    {
+        i++;
+    }
+    if (i == 4 && (str[i] == '\0' || str[i] == '\n'))
+    {
+        exit(1);
+    }
+}
+
+void    set_prompt(char *str, mini_t *gene)
+{
+    if (gene->prompt != NULL)
+        free(gene->prompt);
+
+    gene->prompt = malloc(ft_strlen(str) + 1);
+    ft_strcpy(str, gene->prompt);
 }
 
 int main(int ac, char **av)
 {
     mini_t gene;
     char *str;
+    int rn;
 
     initial(&gene);
+    ignor_signals(&gene);
+    set_prompt("minishell:", &gene);
+
     while (1)
     {
-        ignor_signals(&gene);
-        read(0, str, ft_strlen(str));
-        ft_putstr(str, 1);
+        str = readline(gene.prompt);
+        if (!ft_strlen(str))
+            continue ;
+        add_history(str);
+        exit_command(str);
+        printf("Command received:[%s]\n", str);
     }
+
+    return 0;
 }
