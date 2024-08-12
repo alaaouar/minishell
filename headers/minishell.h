@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 02:18:04 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 02:48:30 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,28 @@ typedef struct minishell_s
     
 }   mini_t;
 
+typedef enum s_id
+{
+    WORD,
+    PIPE,
+    APPEND,
+    HEREDOC,
+    INFILE,
+    OUTFILE,
+}   t_id;
+
+typedef struct s_token
+{
+    char            *value;
+    t_id            token;
+    struct s_token  *next;
+}               t_token;
+
+typedef struct s_cmd
+{
+    char **arguments;
+    // a linked list of redirections here
+}   t_cmd;
 
 // typedef struct s_list
 // {
