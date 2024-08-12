@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 02:48:30 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:12:49 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_cmd
 void        set_prompt(char *str, mini_t *gene);
 void        ft_strcpy(char *s1, char *s2);
 void	    *ft_memset(void *s, int c, size_t n);
-void        exit_command(char *str);
+void        exit_command(char *str, mini_t *gene);
 void        ignor_signals(mini_t *gene);
 int         ft_strlen(char *str);
 void        ft_putstr_fd(char *str,int fd);
