@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/11 19:01:11 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 02:18:04 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ typedef struct minishell_s
 {
     bool signalset;
     char *prompt;
+    char *cmd;
+    char *opt;
     
 }   mini_t;
 
