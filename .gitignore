@@ -1,0 +1,10 @@
+# Ignore object files
+*.o
+
+# Ignore hidden files (files starting with a dot)
+.*
+
+# Exclude specific hidden files or directories from being ignored (optional)
+!.gitignore
+!.git/
+

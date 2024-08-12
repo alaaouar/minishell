@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 19:31:49 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:39:09 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int main(int ac, char **av)
         exit_command(str, &gene);
         printf("Command received:[%s]\n", str);
         printf("cmd is [%s]\n", gene.cmd);
-        printf("cmd is [%s]\n", gene.opt);
+        printf("opt is [%s]\n", gene.opt);
         free(gene.cmd);
         free(str);
     }
