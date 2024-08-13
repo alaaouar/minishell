@@ -6,13 +6,14 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 19:48:26 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:52:02 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include "lexer.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -31,15 +32,7 @@ typedef struct minishell_s
     
 }   mini_t;
 
-typedef enum s_id
-{
-    WORD,
-    PIPE,
-    APPEND,
-    HEREDOC,
-    INFILE,
-    OUTFILE,
-}   t_id;
+
 
 typedef struct s_token
 {
