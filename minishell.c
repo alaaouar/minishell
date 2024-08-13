@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 19:39:09 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:05:00 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,23 @@ int s_len(char *s)
     }
     return i;
 }
+
+int count_options(char *str)
+{
+    int i;
+    int opn;
+
+    i = 0;
+    opn = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] == '-')
+            opn++;
+        i++;
+    }
+    return (opn);
+}
+
 char *copyfier(char *str)
 {
     int len;
@@ -82,52 +99,55 @@ char *copyfier(char *str)
 }
 
 void parce(char *str, mini_t *gene) {
-    int i = 0;
+    int i = 0, x = 0;
 
-    while (str[i] == ' ' || str[i] == '\t') {
+    gene->cmd = NULL;
+    gene->opt = malloc(sizeof(char*) * count_options(str)); // MAX_OPTIONS is a constant defining max number of options
+
+    if (!gene->opt) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    // Skip initial whitespace
+    while (str[i] == ' ' || str[i] == '\t')
         i++;
-    }
 
-    if (str[i] == '\0') {
-        // No command to process
-        gene->cmd = NULL;
-        gene->opt = NULL;
+    if (str[i] == '\0') // Empty input
         return;
-    }
 
+    // Determine if the first part is a command or option
     if (str[i] == '-') {
-        // Extract option
-        gene->opt = copyfier(str + i);
-        gene->cmd = NULL;
+        gene->opt[x++] = copyfier(str + i);
     } else {
-        // Extract command
         gene->cmd = copyfier(str + i);
-        gene->opt = NULL;
     }
 
-    // Move `i` past the command or option
     i += s_len(str + i);
 
-    while (str[i] == ' ' || str[i] == '\t') {
-        i++;
+    // Process remaining part as options
+    while (str[i] != '\0') {
+        while (str[i] == ' ' || str[i] == '\t')
+            i++;
+        if (str[i] == '-' && x < count_options(str)) {
+            gene->opt[x++] = copyfier(str + i);
+        }
+        i += s_len(str + i);
     }
 
-    // If there's more text left, it might be an option
-    if (str[i] != '\0' && str[i] == '-') {
-        gene->opt = copyfier(str + i);
-    }
+    gene->opt[x] = NULL; // Null-terminate the options array
 }
 
 int main(int ac, char **av)
 {
     mini_t gene;
     char *str;
+    int test = 0;
     int rn;
 
     initial(&gene);
     ignor_signals(&gene);
     set_prompt("minishell:", &gene);
-
     while (1)
     {
         str = readline(gene.prompt);
@@ -138,10 +158,15 @@ int main(int ac, char **av)
         exit_command(str, &gene);
         printf("Command received:[%s]\n", str);
         printf("cmd is [%s]\n", gene.cmd);
-        printf("opt is [%s]\n", gene.opt);
+        test = 0;
+        while(gene.opt[test])
+        {
+            printf("opt is [%s]\n", gene.opt[test]);
+            test++;
+        }
         free(gene.cmd);
         free(str);
-    }
 
+    }
     return 0;
 }

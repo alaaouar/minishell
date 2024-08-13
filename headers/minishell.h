@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 15:12:49 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:48:26 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct minishell_s
     bool signalset;
     char *prompt;
     char *cmd;
-    char *opt;
+    char **opt;
     
 }   mini_t;
 
@@ -50,7 +50,9 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-    char **arguments;
+    char *cmd;
+    
+    // char **arguments;
     // a linked list of redirections here
 }   t_cmd;
 
@@ -71,3 +73,10 @@ void        ft_putstr_fd(char *str,int fd);
 void        ft_putchar_fd(char c, int fd);
 
 #endif
+
+
+// ls -a -l
+
+// char **cmd, cmd[0] = "ls";
+// char **opt, opt[0] = "-a", opt[1] = "-l";
+// execve(cmd[0], opt, env);
