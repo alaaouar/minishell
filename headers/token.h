@@ -1,30 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 17:26:22 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/18 17:08:30 by alaaouar         ###   ########.fr       */
+/*   Created: 2024/08/18 15:35:11 by alaaouar          #+#    #+#             */
+/*   Updated: 2024/08/18 16:57:31 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef TOKEN_H
+#define TOKEN_H
 
-#include "token.h"
-
-typedef struct lexer_s
+typedef enum s_id
 {
-    char c;
-    unsigned int i;
-    char *content;
-}               lexer_t;
+    WORD,
+    PIPE,
+    APPEND,
+    HEREDOC,
+    INFILE,
+    OUTFILE,
+}   t_id;
 
-lexer_t *init_lexer(char *content);
-void    lexer_advance(lexer_t *lexer);
-void    lexer_skipe_white(lexer_t *lexer);
+typedef struct s_token
+{
+    char            *value;
+    t_id            token;
+    struct s_token  *next;
+}               t_token;
+
+t_token *token_init(int type , char *value);
 
 
 #endif

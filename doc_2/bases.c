@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:18:53 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/12 16:25:04 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:20:29 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,27 @@ void    ft_strcpy(char *s1, char *s2)
         i++;
     }
     s2[i] = '\0';
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((unsigned char *)s)[i] = '\0';
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*str;
+
+	str = (void *)malloc(count * size);
+	if (!str)
+		return (0);
+	ft_bzero(str, (count * size));
+	return (str);
 }

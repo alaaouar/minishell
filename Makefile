@@ -1,12 +1,13 @@
 CC = cc
 
-SRC = minishell.c doc_2/bases.c
+SRC = minishell.c doc_2/bases.c lexer.c token.c 
 
 NAME = shell
 
 FLAGS = -Wall -Werror -Wextra -g3 -lreadline -lhistory
 
 OBJ     = $(SRC:.c=.o)
+
 
 all: $(NAME)
 

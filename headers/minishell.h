@@ -6,14 +6,16 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/13 18:52:02 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:36:20 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "lexer.h"
+# include "lexer.h"
+# include "token.h"
+
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -31,15 +33,6 @@ typedef struct minishell_s
     char **opt;
     
 }   mini_t;
-
-
-
-typedef struct s_token
-{
-    char            *value;
-    t_id            token;
-    struct s_token  *next;
-}               t_token;
 
 typedef struct s_cmd
 {
@@ -64,6 +57,7 @@ void        ignor_signals(mini_t *gene);
 int         ft_strlen(char *str);
 void        ft_putstr_fd(char *str,int fd);
 void        ft_putchar_fd(char c, int fd);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif
 

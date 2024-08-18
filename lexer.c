@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:49:00 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/13 18:55:54 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/18 17:27:59 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,93 @@
 
 lexer_t *init_lexer(char *content)
 {
-	lexer_t lexer;
+    lexer_t *lexer;
 
-	lexer = ft_calloc(1, sizeof())
+    lexer = (lexer_t *)malloc(sizeof(lexer_t));
+    if (!lexer)
+        return NULL;
+
+    lexer->content = content;
+    lexer->i = 0;
+    lexer->c = content[lexer->i];
+
+    return lexer;
 }
 void    lexer_advance(lexer_t *lexer)
 {
-	
+	if (lexer->c != '\0' && lexer->i < ft_strlen(lexer->content))
+	{
+		lexer->i += 1;
+		lexer->c = lexer->content[lexer->i];
+	}
 }
-void    lexer_skipe_white(lexer_t)
+void    lexer_skipe_white(lexer_t *lexer)
 {
+	while (lexer->c == ' ' || lexer->c == '\t')
+	{
+		lexer_advance(lexer);
+	}
+}
+char *lex_c_str(lexer_t *lexer)
+{
+	char str[2];
+
+	str[0] = lexer->c;
+	str[1] = '\0';
+	return str;
+}
+t_token *lexer_advance_with_token(lexer_t *lexer, t_token *token)
+{
+	lexer_advance(lexer);
+	return(token);
+}
+int quote_len(lexer_t *lexer)
+{
+	int i;
+	char *str;
+
+	i = lexer->i;
+	str = lexer->content;
+	while (str[i] != '\0' && str[i] != '"')
+		i++;
+	return 0;
+}
+char *lexer_collect_string(lexer_t *lexer)
+{
+	char *value;
+	
+	lexer_advance(lexer);
+	value = (char *)malloc(quote_len(lexer) * sizeof(char));
+	value[0] = '\0';
+	while (lexer->c != '"')
+	{
+		if (lexer->c == '\0')
+			perror("no ending quote ");
+		value[i]
+		
+	}
 	
 }
+t_token	*lexer_get_next_token(lexer_t *lexer)
+{
+	t_token *token;
+	while (lexer->c != '\0' && lexer->i < ft_strlen(lexer->content))
+		if (lexer->c == ' ' || lexer->c == '\t')
+			lexer_skipe_white(lexer);
 
+	if (lexer->c == '"')
+		return (lexer_collect_string(lexer));
+
+	if (lexer->c == '|')
+		return (lexer_advance_with_token(lexer, token_init(PIPE, lex_c_str(lexer))));
+	else if (lexer->c == '<')
+		return (lexer_advance_with_token(lexer, token_init(INFILE, lex_c_str(lexer))));	
+	else if (lexer->c == '>')
+		return (lexer_advance_with_token(lexer, token_init(OUTFILE, lex_c_str(lexer))));	
+	
+	
+	return (token);
+}
 
 // bool isKeyword(char* str)
 // {
