@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/13 18:05:00 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:56:57 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void    initial(mini_t *gene)
     gene->prompt = NULL;
 }
 
-void exit_command(char *str, mini_t *gene)
+void exit_command(char *str, t_cmd *cmd)
 {
     int i = 0;
     char ext[] = "exit";
@@ -34,9 +34,8 @@ void exit_command(char *str, mini_t *gene)
         i++;
     if (i == 4 && (str[i] == '\0' || str[i] == '\n'))
     {
+        free_cmd_list(cmd);
         free(str);
-        free(gene->cmd);
-        free(gene->prompt);
         exit(1);
     }
 }
@@ -98,49 +97,86 @@ char *copyfier(char *str)
     return new;
 }
 
-void parce(char *str, mini_t *gene) {
-    int i = 0, x = 0;
+void parce(char *str, t_cmd **head) {
+    int i = 0;
+    t_cmd *current = NULL;
+    t_cmd *last = NULL;
 
-    gene->cmd = NULL;
-    gene->opt = malloc(sizeof(char*) * count_options(str)); // MAX_OPTIONS is a constant defining max number of options
+    // Initialize the linked list
+    *head = NULL;
 
-    if (!gene->opt) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-
-    // Skip initial whitespace
+    // Skip leading spaces and tabs
     while (str[i] == ' ' || str[i] == '\t')
         i++;
-
-    if (str[i] == '\0') // Empty input
+    if (str[i] == '\0')
         return;
 
-    // Determine if the first part is a command or option
+    // Process command or options
     if (str[i] == '-') {
-        gene->opt[x++] = copyfier(str + i);
+        // Process as option
+        current = create_t_cmd(str + i, OPT);
+        *head = current; // Set the head of the linked list
+        last = current;
     } else {
-        gene->cmd = copyfier(str + i);
+        // Process as command
+        current = create_t_cmd(str + i, CMD);
+        *head = current; // Set the head of the linked list
+        last = current;
     }
 
+    // Move to the end of the current command or option
     i += s_len(str + i);
 
     // Process remaining part as options
     while (str[i] != '\0') {
         while (str[i] == ' ' || str[i] == '\t')
             i++;
-        if (str[i] == '-' && x < count_options(str)) {
-            gene->opt[x++] = copyfier(str + i);
+        if (str[i] == '-') {
+            current = create_t_cmd(str + i, OPT);
+            if (last != NULL) {
+                last->next = current; // Append to the list
+            }
+            last = current;
         }
         i += s_len(str + i);
     }
-
-    gene->opt[x] = NULL; // Null-terminate the options array
 }
 
+
+int    its_valide(char *str)
+{
+    int i;
+    int g;
+
+    i = 0;
+    g = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] == '"')
+            g++;
+        i++;
+    }
+    if (g % 2 != 0)
+    {
+        printf("quotes command non valid\n");
+        
+        return(0);
+    }
+    return 1;
+}
+void print_cmd_list(const t_cmd *head)
+{
+    const t_cmd *current = head;
+    while (current != NULL) {
+        // Print the value and token of the current node
+        printf("Value: [%s], Token: [%s]\n", current->value,(current->token == CMD) ? "CMD" : "OPT");
+        current = current->next; // Move to the next node
+    }
+}
 int main(int ac, char **av)
 {
     mini_t gene;
+    t_cmd *cmd;
     char *str;
     int test = 0;
     int rn;
@@ -154,19 +190,14 @@ int main(int ac, char **av)
         if (!ft_strlen(str))
             continue ;
         add_history(str);
-        parce(str, &gene);
-        exit_command(str, &gene);
+        if (its_valide(str))
+            parce(str, &cmd);
+        else
+            continue;
+        exit_command(str, cmd);
         printf("Command received:[%s]\n", str);
-        printf("cmd is [%s]\n", gene.cmd);
-        test = 0;
-        while(gene.opt[test])
-        {
-            printf("opt is [%s]\n", gene.opt[test]);
-            test++;
-        }
-        free(gene.cmd);
-        free(str);
-
+        print_cmd_list(cmd);
+        free_cmd_list(cmd);
     }
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 15:35:11 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/24 21:42:55 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:34:51 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ typedef enum s_id
     HEREDOC,
     INFILE,
     OUTFILE,
+    CMD,
+    OPT,
 }   t_id;
 
 typedef struct s_token

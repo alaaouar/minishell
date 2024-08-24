@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:30:31 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/24 21:46:47 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:45:59 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,15 @@ void add_to_end(t_cmd **head, t_cmd *new_node)
     while (current->next != NULL)
         current = current->next;
     current->next = new_node;
+}
+
+void free_cmd_list(t_cmd *head)
+{
+    t_cmd *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next; // Move to the next node
+        free(temp->value); // Free the value string
+        free(temp);        // Free the node itself
+    }
 }

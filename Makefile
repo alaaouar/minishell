@@ -4,7 +4,7 @@ SRC = minishell.c doc_2/bases.c lexer.c token.c linked.c
 
 NAME = shell
 
-FLAGS = -Wall -Werror -Wextra -g3 -lreadline -lhistory
+FLAGS = -Wall -Werror -Wextra -g3 -lreadline -lhistory -fsanitize=address -g3
 
 OBJ     = $(SRC:.c=.o)
 

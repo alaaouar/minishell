@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:49:00 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/24 21:45:13 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:44:30 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int quote_len(lexer_t *lexer)
 		i++;
 	return 0;
 }
+
 char *lexer_collect_string(lexer_t *lexer)
 {
 	char *value;
