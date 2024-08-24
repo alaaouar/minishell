@@ -1,6 +1,6 @@
 CC = cc
 
-SRC = minishell.c doc_2/bases.c lexer.c token.c 
+SRC = minishell.c doc_2/bases.c lexer.c token.c linked.c
 
 NAME = shell
 

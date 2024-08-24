@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:29:43 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/18 16:36:20 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 21:28:05 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ typedef struct minishell_s
 
 typedef struct s_cmd
 {
-    char *cmd;
-    
-    // char **arguments;
-    // a linked list of redirections here
+    char *value;
+    t_id token;
+    struct s_cmd *next;
+
 }   t_cmd;
 
 // typedef struct s_list
@@ -49,6 +49,7 @@ typedef struct s_cmd
 // 	struct s_list	*next;
 // }					t_list;
 
+t_cmd*      create_t_cmd(char *value, t_id token);
 void        set_prompt(char *str, mini_t *gene);
 void        ft_strcpy(char *s1, char *s2);
 void	    *ft_memset(void *s, int c, size_t n);

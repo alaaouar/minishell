@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:49:00 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/18 17:27:59 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 21:45:13 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ void    lexer_skipe_white(lexer_t *lexer)
 }
 char *lex_c_str(lexer_t *lexer)
 {
-	char str[2];
+    char *str;
 
-	str[0] = lexer->c;
-	str[1] = '\0';
-	return str;
+	str = (char *)malloc(2 * sizeof(char));
+	if (str == NULL)
+		return NULL;
+    str[0] = lexer->c;
+    str[1] = '\0';
+    return str;
 }
 t_token *lexer_advance_with_token(lexer_t *lexer, t_token *token)
 {
@@ -68,7 +71,9 @@ int quote_len(lexer_t *lexer)
 char *lexer_collect_string(lexer_t *lexer)
 {
 	char *value;
+	int i;
 	
+	i = 0;
 	lexer_advance(lexer);
 	value = (char *)malloc(quote_len(lexer) * sizeof(char));
 	value[0] = '\0';
@@ -76,10 +81,11 @@ char *lexer_collect_string(lexer_t *lexer)
 	{
 		if (lexer->c == '\0')
 			perror("no ending quote ");
-		value[i]
-		
+		value[i] = lexer->c;
+		lexer_advance(lexer);
+		i++;
 	}
-	
+	return (value);
 }
 t_token	*lexer_get_next_token(lexer_t *lexer)
 {
@@ -89,7 +95,7 @@ t_token	*lexer_get_next_token(lexer_t *lexer)
 			lexer_skipe_white(lexer);
 
 	if (lexer->c == '"')
-		return (lexer_collect_string(lexer));
+		return (lexer_advance_with_token(lexer, token_init(QUOTE, lexer_collect_string(lexer))));
 
 	if (lexer->c == '|')
 		return (lexer_advance_with_token(lexer, token_init(PIPE, lex_c_str(lexer))));

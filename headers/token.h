@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 15:35:11 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/18 16:57:31 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/24 21:42:55 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ typedef enum s_id
     WORD,
     PIPE,
     APPEND,
+    QUOTE,
     HEREDOC,
     INFILE,
     OUTFILE,
