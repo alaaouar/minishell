@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "stdbool.h": "c",
-        "fcntl.h": "c",
-        "signal.h": "c",
-        "minishell.h": "c",
-        "LEXER.C": "cpp"
-    }
-}

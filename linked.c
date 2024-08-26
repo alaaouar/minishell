@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:30:31 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/24 22:45:59 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:43:39 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,18 @@ char	*ft_strdup(char *s1)
 	return (new);
 }
 
-t_cmd* create_t_cmd(char *value, t_id token)
+char *char_to_8char(char c)
+{
+    char *new;
+
+    new = malloc((sizeof(char)) * 2);
+    new[0] = c;
+    new[1] = '\0';
+    return new;
+}
+
+
+t_cmd* create_t_cmd(char *value, t_id token, char c)
 {
     t_cmd* new_t_cmd;
 
@@ -37,7 +48,10 @@ t_cmd* create_t_cmd(char *value, t_id token)
         perror("Failed to allocate memory");
         exit(EXIT_FAILURE);
     }
-    new_t_cmd->value = ft_strdup(value);
+    if(value != NULL)
+        new_t_cmd->value = ft_strdup(value);
+    if (c != 0)
+        new_t_cmd->value = ft_strdup(char_to_8char(c));
     new_t_cmd->token = token;
     new_t_cmd->next = NULL;
     return new_t_cmd;

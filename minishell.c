@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/24 22:56:57 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:23:37 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void exit_command(char *str, t_cmd *cmd)
     {
         free_cmd_list(cmd);
         free(str);
-        exit(1);
+        exit(0);
     }
 }
 
@@ -45,6 +45,11 @@ void    set_prompt(char *str, mini_t *gene)
     if (gene->prompt != NULL)
         free(gene->prompt);
     gene->prompt = malloc(ft_strlen(str) + 1);
+    if (gene->prompt == NULL)
+    {
+        perror("malloc failed");
+        exit(1);
+    }
     ft_strcpy(str, gene->prompt);
 }
 
@@ -83,9 +88,10 @@ char *copyfier(char *str)
     
     len = s_len(str);
     new = malloc(sizeof(char) * (len + 1));
-    if (!new) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
+    if (new == NULL)
+    {
+        perror("malloc failed");
+        exit(1);
     }
     new[len] = '\0';
     len--;
@@ -101,47 +107,40 @@ void parce(char *str, t_cmd **head) {
     int i = 0;
     t_cmd *current = NULL;
     t_cmd *last = NULL;
-
-    // Initialize the linked list
+    
     *head = NULL;
-
-    // Skip leading spaces and tabs
     while (str[i] == ' ' || str[i] == '\t')
         i++;
     if (str[i] == '\0')
         return;
 
-    // Process command or options
-    if (str[i] == '-') {
-        // Process as option
-        current = create_t_cmd(str + i, OPT);
-        *head = current; // Set the head of the linked list
-        last = current;
-    } else {
-        // Process as command
-        current = create_t_cmd(str + i, CMD);
-        *head = current; // Set the head of the linked list
-        last = current;
-    }
-
-    // Move to the end of the current command or option
-    i += s_len(str + i);
-
-    // Process remaining part as options
     while (str[i] != '\0') {
         while (str[i] == ' ' || str[i] == '\t')
             i++;
+        if (str[i] == '\0')
+            break;
+
+
         if (str[i] == '-') {
-            current = create_t_cmd(str + i, OPT);
-            if (last != NULL) {
-                last->next = current; // Append to the list
-            }
-            last = current;
+            current = create_t_cmd(copyfier(str + i), OPT, 0);
+        } 
+        else if (str[i] == '|') {
+            current = create_t_cmd(NULL, PIPE, str[i]);
         }
+        else {
+            current = create_t_cmd(copyfier(str + i), CMD, 0);
+        }
+
+        if (*head == NULL) {
+            *head = current;
+        } else {
+            last->next = current;
+        }
+        last = current;
+
         i += s_len(str + i);
     }
 }
-
 
 int    its_valide(char *str)
 {
@@ -169,7 +168,20 @@ void print_cmd_list(const t_cmd *head)
     const t_cmd *current = head;
     while (current != NULL) {
         // Print the value and token of the current node
-        printf("Value: [%s], Token: [%s]\n", current->value,(current->token == CMD) ? "CMD" : "OPT");
+        const char *token_str;
+        switch (current->token) {
+            case WORD: token_str = "WORD"; break;
+            case PIPE: token_str = "PIPE"; break;
+            case APPEND: token_str = "APPEND"; break;
+            case QUOTE: token_str = "QUOTE"; break;
+            case HEREDOC: token_str = "HEREDOC"; break;
+            case INFILE: token_str = "INFILE"; break;
+            case OUTFILE: token_str = "OUTFILE"; break;
+            case CMD: token_str = "CMD"; break;
+            case OPT: token_str = "OPT"; break;
+            default: token_str = "UNKNOWN"; break;
+        }
+        printf("Value: [%s], Token: [%s]\n", current->value, token_str);
         current = current->next; // Move to the next node
     }
 }
@@ -177,6 +189,7 @@ int main(int ac, char **av)
 {
     mini_t gene;
     t_cmd *cmd;
+    lexer_t *lexer;
     char *str;
     int test = 0;
     int rn;
@@ -194,8 +207,11 @@ int main(int ac, char **av)
             parce(str, &cmd);
         else
             continue;
+        printf("lexer tests \n");
+        
+        lexer = init_lexer(str);
+        
         exit_command(str, cmd);
-        printf("Command received:[%s]\n", str);
         print_cmd_list(cmd);
         free_cmd_list(cmd);
     }
