@@ -6,7 +6,7 @@
 /*   By: alaaouar <alaaouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:25:17 by alaaouar          #+#    #+#             */
-/*   Updated: 2024/08/26 18:23:37 by alaaouar         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:58:13 by alaaouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,40 @@ char *copyfier(char *str)
     return new;
 }
 
+char    *get_string(char *str, char c)
+{
+    int i;
+    char *new;
+    
+    i = 1;
+    while (str[i] != '\0')
+    {
+        if (str[i] == '\'')
+        {
+            while (str[i] != '\'')
+                i++;
+        }
+        if (str[i] == c && str[i + 1] == ' ')
+        {
+            break;
+        }
+        i++;
+    }
+    new = malloc(i + 1);
+    if (new == NULL)
+    {
+        perror("malloc failed");
+        exit(1);
+    }
+    new[i] = '\0';
+    while (i >= 0)
+    {
+        new[i] = str[i];
+        i--;
+    }    
+    return (new);
+}
+
 void parce(char *str, t_cmd **head) {
     int i = 0;
     t_cmd *current = NULL;
@@ -119,13 +153,21 @@ void parce(char *str, t_cmd **head) {
             i++;
         if (str[i] == '\0')
             break;
-
-
+            
         if (str[i] == '-') {
             current = create_t_cmd(copyfier(str + i), OPT, 0);
         } 
         else if (str[i] == '|') {
             current = create_t_cmd(NULL, PIPE, str[i]);
+        }
+        else if (str[i] == '"') {
+            current = create_t_cmd(get_string(str + i, '"'), STRING, 0);
+        }
+        else if (str[i] == '>') {
+            current = create_t_cmd(NULL, OUTFILE, str[i]);
+        }
+        else if (str[i] == '<') {
+            current = create_t_cmd(NULL, INFILE, str[i]);
         }
         else {
             current = create_t_cmd(copyfier(str + i), CMD, 0);
@@ -151,7 +193,7 @@ int    its_valide(char *str)
     g = 0;
     while (str[i] != '\0')
     {
-        if (str[i] == '"')
+        if (str[i] == '"' || str[i] == '\'')
             g++;
         i++;
     }
@@ -167,10 +209,9 @@ void print_cmd_list(const t_cmd *head)
 {
     const t_cmd *current = head;
     while (current != NULL) {
-        // Print the value and token of the current node
         const char *token_str;
         switch (current->token) {
-            case WORD: token_str = "WORD"; break;
+            case STRING: token_str = "STRING"; break;
             case PIPE: token_str = "PIPE"; break;
             case APPEND: token_str = "APPEND"; break;
             case QUOTE: token_str = "QUOTE"; break;
@@ -182,7 +223,7 @@ void print_cmd_list(const t_cmd *head)
             default: token_str = "UNKNOWN"; break;
         }
         printf("Value: [%s], Token: [%s]\n", current->value, token_str);
-        current = current->next; // Move to the next node
+        current = current->next;
     }
 }
 int main(int ac, char **av)
@@ -207,7 +248,6 @@ int main(int ac, char **av)
             parce(str, &cmd);
         else
             continue;
-        printf("lexer tests \n");
         
         lexer = init_lexer(str);
         
